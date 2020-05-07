@@ -4,7 +4,7 @@
 
 This program is designed to accept a user's list of ingredients, say "salsa", "tortilla", and "beef", and predict the style of cuisine those ingredients most belong to, as well as recommending recipes which utilize as many of the listed ingredients as possible. The user is able to select how many recipes they would like to display.
 
-This is achieved by first generating 'Word Vectors' for each word in the Training dataset's (80% of the full dataset) recipe lists, using Spacy's "en_core_web_lg" model, which contains word vectors for many food words. I then took an average of all the word vectors within a recipe to generate 300 numerical features for each recipe. From there, I used the K-Nearest Neighbor's (KNN) approach to train a classifer. I then evaluated the performance of my classifer using the test data (the remaining 20%). It performs with an average accuracy of 71% across all the classes, doing better on the larger classes, and slightly worse on the smaller classes. This represents a 51 point increase in accuracy from a naiive base model (which will simply always select the largest class). Finally, I used this classifer to predict the cuisine style of the user's ingredients.
+This is achieved by first generating 'Word Vectors' for each word in the Training dataset's (80% of the full dataset) recipe lists, using Spacy's "en_core_web_lg" model, which contains word vectors for many food words. I then took an average of all the word vectors within a recipe to generate 300 numerical features for each recipe. From there, I used the K-Nearest Neighbor's (KNN) approach to train a classifer. I then evaluated the performance of my classifer using the test data (the remaining 20%). It performs with an average accuracy of 71% across all the classes, doing better on the larger classes, and slightly worse on the smaller classes. This represents a 51 point increase in accuracy from a naiive base model (which will simply always select the largest class). Finally, I used this classifer to predict the cuisine style of the user's ingredients and recommend new recipes.
 
 We are using data provided by Yummly.com, located at:
 https://www.dropbox.com/s/f0tduqyvgfuin3l/yummly.json
@@ -26,7 +26,7 @@ https://www.dropbox.com/s/f0tduqyvgfuin3l/yummly.json
 ```
     jupyter notebook
 ```
-- When your jupyter server opens, you can now use the notebook and run all code blocks.
+- When your jupyter server opens and you have the data downloaded into the docs/ folder and you have all dependencies installed, you can now use the notebook and run all code blocks.
    
 
 ### How did I turn my text into features and why?
@@ -51,7 +51,19 @@ By default I set N = 3, as it gives you a decent number of options without being
 
 ### Describe the functions and the code
 
+##### The general workflow of the Notebook:
 
+- First I read in the .json data and write it to a Pandas dataframe ('yumdf').
+- Then I take a look and do some very surface-level data exploration, checking how many items are in each class and how many classes we have, and plotting the results.
+- I then leverage the Spacy 'en_core_web_lg' model to tokenize my recipes and to append the word vectors to yumdf.
+- I utilize the speed and power of numpy to quickly calculate an 'average' word vector for each recipe, and each element of this new vector becomes a column of a new dataframe, 'yumML'
+- I add the correct Class (cuisine style) as an extra column to yumML.
+- Next, I use sklearn package test_train_split to generate a training dataset and a test dataset. I chose 80% of the data to go into training, and 20% to be reserved for testing (I check how many of each class are in the training dataset, as having very small classes will skew the training step, it looks OK, our smallest class has 366 recipes)
+- I apply the K-Nearest-Neighbors approach to train our data.
+
+... 
+
+Remaining README is a work in progress.
 
 
 
